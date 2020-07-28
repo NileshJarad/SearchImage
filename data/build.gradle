@@ -43,6 +43,9 @@ dependencies {
     implementation rootProject.daggerAndroid
     implementation rootProject.daggerSupport
 
+    implementation rootProject.roomLib
+    kapt rootProject.roomAnotation
+
     kapt rootProject.daggerCompiler
     kapt rootProject.daggerAndroidCompiler
 
@@ -50,4 +53,5 @@ dependencies {
     testImplementation rootProject.junit
     testImplementation rootProject.coroutinesTesting
 
+    debugApi 'com.amitshekhar.android:debug-db:1.0.0'
 }
