@@ -49,10 +49,7 @@ class SearchedImageAdapter(
             searchImageResponse: SearchImageResponse
         ) {
             viewDataBinding.viewModel = vm
-            viewDataBinding.searchImage.load(searchImageResponse.imageUrl){
-                crossfade(true)
-                placeholder(R.drawable.ic_image_24px)
-            }
+            viewDataBinding.imageData = searchImageResponse
             viewDataBinding.executePendingBindings()
         }
     }

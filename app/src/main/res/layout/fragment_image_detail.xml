@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data class=".ImageDetailBinding">
+
+        <variable
+            name="viewModel"
+            type="com.search_image.detail.ImageDetailViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:showSnack="@{viewModel.snackbarMessage}">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbarDetail"
+            app:theme="@style/WhiteToolBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="@dimen/dime_zero"
+            android:layout_height="@dimen/dime_zero"
+            app:layout_constraintBottom_toTopOf="@+id/commentEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@+id/toolbarDetail">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:padding="@dimen/dime_one"
+                    android:background="@drawable/post_comment_background"
+                    android:id="@+id/detailImageView"
+                    android:layout_width="@dimen/dime_zero"
+                    android:layout_height="@dimen/dime_zero"
+                    android:adjustViewBounds="true"
+                    app:imageUrl="@{viewModel.imageUrl}"
+                    app:layout_constraintDimensionRatio="h,16:9"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="contentDescription"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="@dimen/dime_zero"
+                    android:layout_height="@dimen/dime_zero"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:nestedScrollingEnabled="true"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/detailImageView" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+        <EditText
+            android:id="@+id/commentEditText"
+            android:layout_width="@dimen/dime_zero"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dime_four"
+            android:layout_marginEnd="@dimen/dime_four"
+            android:layout_marginBottom="@dimen/dime_eight"
+            android:background="@drawable/post_comment_background"
+            android:hint="@string/enter_comment"
+            android:inputType="textMultiLine"
+            android:maxLines="4"
+            android:minHeight="@dimen/dime_fourty_four"
+            android:paddingStart="@dimen/dime_eight"
+            android:paddingTop="@dimen/dime_four"
+            android:paddingEnd="@dimen/dime_eight"
+            android:paddingBottom="@dimen/dime_four"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageButton
+            android:id="@+id/postCommentButton"
+            android:layout_width="@dimen/dime_zero"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dime_four"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_send_24px"
+            app:layout_constraintBottom_toBottomOf="@+id/commentEditText"
+            app:layout_constraintEnd_toEndOf="@+id/commentEditText"
+            app:layout_constraintTop_toTopOf="@+id/commentEditText"
+            tools:ignore="contentDescription" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

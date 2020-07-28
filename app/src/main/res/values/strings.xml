@@ -2,4 +2,5 @@
     <string name="app_name">SearchImage</string>
     <string name="search_image">Search Image</string>
     <string name="no_search_result_found">No search result found.</string>
+    <string name="enter_comment">Enter comment</string>
 </resources>

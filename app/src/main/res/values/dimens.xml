@@ -5,4 +5,5 @@
     <dimen name="dime_one">1dp</dimen>
     <dimen name="dime_four">4dp</dimen>
     <dimen name="dime_eight">8dp</dimen>
+    <dimen name="dime_fourty_four">44dp</dimen>
 </resources>

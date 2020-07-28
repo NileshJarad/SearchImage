@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
@@ -45,6 +46,8 @@ dependencies {
 
     implementation project(path: ':data')
     implementation project(path: ':domain')
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'
     testImplementation project(path: ':test')
 
     implementation rootProject.materialLib
@@ -68,6 +71,9 @@ dependencies {
 
     kapt rootProject.daggerCompiler
     kapt rootProject.daggerAndroidCompiler
+
+    implementation rootProject.roomLib
+    kapt rootProject.roomAnotation
 
     testImplementation rootProject.junit
     androidTestImplementation rootProject.extJunit

@@ -5,6 +5,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.search_image.base.BaseViewModel
 import com.search_image.domain.search.SearchImageResponse
 import com.search_image.domain.search.SearchImageUseCase
@@ -17,6 +18,8 @@ import javax.inject.Inject
 class SearchImageViewModel @Inject constructor(
     private val searchImageUseCase: SearchImageUseCase
 ) : BaseViewModel() {
+
+    private lateinit var navController: NavController
 
     // Maintains page count for load more feature
     private var pageCount = 1
@@ -40,7 +43,6 @@ class SearchImageViewModel @Inject constructor(
     // live data that holds search image result
     var imageSearchResult = MutableLiveData<List<SearchImageResponse>>()
 
-
     /***
      * it calls search image with already incremented page count
      */
@@ -50,7 +52,7 @@ class SearchImageViewModel @Inject constructor(
 
     fun searchImage(searchQueryParameter: String?, pageCountParameter: Int) {
         if (loadMore || pageCountParameter == 1) {
-            if(!searchQueryParameter.isNullOrBlank()){
+            if (!searchQueryParameter.isNullOrBlank()) {
                 loaderVisibility.set(true)
                 this.searchQuery = searchQueryParameter
                 this.pageCount = pageCountParameter
@@ -91,7 +93,7 @@ class SearchImageViewModel @Inject constructor(
                         }
                     }
                 }
-            }else {
+            } else {
                 // search is empty so clear all data from list
                 imageSearchResult.value = emptyList()
             }
@@ -99,8 +101,14 @@ class SearchImageViewModel @Inject constructor(
     }
 
 
-    fun onImageClicked() {
-
+    fun onImageClicked(imageData: SearchImageResponse) {
+        navController.navigate(
+            SearchImageFragmentDirections.actionSearchImageFragmentToImageDetailFragment(
+                imageData.imageUrl,
+                imageData.id,
+                imageData.title
+            )
+        )
     }
 
 
@@ -108,5 +116,9 @@ class SearchImageViewModel @Inject constructor(
     fun setTestDataForLoadMore(query: String, pageCount: Int) {
         this.searchQuery = query
         this.pageCount = pageCount
+    }
+
+    fun setNavController(navController: NavController) {
+        this.navController = navController
     }
 }

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.search_image.SearchFragmentBinding
@@ -70,6 +71,8 @@ class SearchImageFragment : BaseFragment() {
                     return true
                 }
             })
+
+            searchViewModel.setNavController(findNavController())
         }.root
     }
 

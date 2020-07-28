@@ -1,6 +1,8 @@
 package com.search_image.di
 
 import androidx.lifecycle.ViewModel
+import com.search_image.detail.ImageDetailFragment
+import com.search_image.detail.ImageDetailViewModel
 import com.search_image.search.SearchImageFragment
 import com.search_image.search.SearchImageViewModel
 import dagger.Binds
@@ -16,5 +18,14 @@ abstract class FragmentsModule {
     @Binds
     @IntoMap
     @ViewModelKey(SearchImageViewModel::class)
-    abstract fun bindMainViewModel(mainViewModel: SearchImageViewModel): ViewModel
+    abstract fun bindSearchImageViewModel(searchImageViewModel: SearchImageViewModel): ViewModel
+
+
+    @ContributesAndroidInjector
+    abstract fun provideImageDetailFragment(): ImageDetailFragment
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ImageDetailViewModel::class)
+    abstract fun bindImageDetailViewModel(imageDetailViewModel: ImageDetailViewModel): ViewModel
 }

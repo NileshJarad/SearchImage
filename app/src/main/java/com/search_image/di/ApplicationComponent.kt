@@ -5,6 +5,7 @@ import androidx.annotation.Keep
 import com.search_image.SearchImageApp
 import com.search_image.data.di.RepositoryModule
 import com.search_image.data.di.RetrofitModule
+import com.search_image.data.di.RoomDbModule
 import com.search_image.data.di.SearchApiModule
 import com.search_image.domain.search.di.UseCaseModule
 import dagger.BindsInstance
@@ -20,8 +21,9 @@ import javax.inject.Singleton
         AndroidSupportInjectionModule::class,
         ViewModelFactoryModule::class,
         RepositoryModule::class,
-        UseCaseModule::class,
+        RoomDbModule::class,
         RetrofitModule::class,
+        UseCaseModule::class,
         SearchApiModule::class,
         ActivitiesModule::class,
         FragmentsModule::class

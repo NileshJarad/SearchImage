@@ -9,11 +9,15 @@
         <variable
             name="viewModel"
             type="com.search_image.search.SearchImageViewModel" />
+
+        <variable
+            name="imageData"
+            type="com.search_image.domain.search.SearchImageResponse" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:onClick="@{() -> viewModel.onImageClicked()}"
+        android:onClick="@{() -> viewModel.onImageClicked(imageData)}"
         android:layout_height="wrap_content">
 
         <ImageView
@@ -26,6 +30,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="contentDescription"
+            app:imageUrl="@{imageData.imageUrl}"
             tools:srcCompat="@tools:sample/avatars" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
