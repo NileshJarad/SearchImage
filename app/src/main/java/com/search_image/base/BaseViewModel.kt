@@ -1,4 +1,4 @@
-package com.base
+package com.search_image.base
 
 import androidx.lifecycle.ViewModel
 

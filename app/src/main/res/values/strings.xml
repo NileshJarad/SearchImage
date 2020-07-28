@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SearchImage</string>
+    <string name="search_image">Search Image</string>
+    <string name="no_search_result_found">No search result found.</string>
 </resources>
