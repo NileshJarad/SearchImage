@@ -30,7 +30,7 @@ class SearchImageFragment : BaseFragment() {
     ): View? {
         return SearchFragmentBinding.inflate(inflater, container, false).apply {
             searchViewModel =
-                ViewModelProvider(requireActivity(), factory).get(SearchImageViewModel::class.java)
+                ViewModelProvider(this@SearchImageFragment, factory).get(SearchImageViewModel::class.java)
             viewModel = searchViewModel
             with(imagesRecyclerView) {
                 gridLayoutManager = GridLayoutManager(requireContext(), 3)
