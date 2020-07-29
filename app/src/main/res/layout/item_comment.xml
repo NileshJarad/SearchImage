@@ -38,7 +38,7 @@
             android:layout_marginBottom="@dimen/dime_sixteen"
             tools:text="12.45 PM"
             app:commentDate="@{comment.timeStamp}"
-            android:textColor="@android:color/secondary_text_light"
+            android:textColor="@color/colorTimeStamp"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/separatorView"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +48,7 @@
             android:id="@+id/separatorView"
             android:layout_width="@dimen/dime_zero"
             android:layout_height="1dp"
-            android:background="@android:color/secondary_text_dark"
+            android:background="@color/colorDivider"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
