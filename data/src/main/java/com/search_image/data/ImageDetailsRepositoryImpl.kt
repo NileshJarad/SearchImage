@@ -26,7 +26,7 @@ class ImageDetailsRepositoryImpl @Inject constructor(
             allComments.clear()
         }
 
-        val resultFromDB: Collection<CommentResponse> = imageDb.commentDao()?.getAllComments(
+        val resultFromDB: Collection<CommentResponse> = imageDb.commentDao()?.getComments(
             imageId,
             PAGE_SIZE,
             (page - 1) * PAGE_SIZE
@@ -39,7 +39,7 @@ class ImageDetailsRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun postComments(postCommentRequestDraft: PostCommentRequest) {
+    override suspend fun postComments(postCommentRequestDraft: PostCommentRequest):CommentResponse {
         imageDb.commentDao()?.insert(
             Comment(
                 imageId = postCommentRequestDraft.imageId,
@@ -47,5 +47,10 @@ class ImageDetailsRepositoryImpl @Inject constructor(
                 timeStamp = System.currentTimeMillis()
             )
         )
+        //fetch last comment only
+        val comments = imageDb.commentDao()?.getComments(postCommentRequestDraft.imageId, 1, 0) ?: emptyList()
+
+        allComments.addAll(0,comments)
+        return comments[0]
     }
 }

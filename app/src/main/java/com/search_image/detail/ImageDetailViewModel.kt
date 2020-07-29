@@ -30,7 +30,12 @@ class ImageDetailViewModel @Inject constructor(
     fun getCommentsFromDb() {
         if (isLastPage.not()) {
             viewModelScope.launch {
-                val (commentListFromDb,lastPage) = withContext(Dispatchers.IO) { getCommentUseCase(imageId,page) }
+                val (commentListFromDb, lastPage) = withContext(Dispatchers.IO) {
+                    getCommentUseCase(
+                        imageId,
+                        page
+                    )
+                }
                 comments.value = commentListFromDb
                 isLastPage = lastPage
                 if (lastPage.not()) {
@@ -46,7 +51,7 @@ class ImageDetailViewModel @Inject constructor(
             return
         }
         viewModelScope.launch() {
-            withContext(Dispatchers.IO) {
+            val lastComment = withContext(Dispatchers.IO) {
                 postCommentUseCase(
                     PostCommentRequest(
                         imageId,
@@ -54,6 +59,9 @@ class ImageDetailViewModel @Inject constructor(
                     )
                 )
             }
+            val toMutableList = comments.value?.toMutableList()
+            toMutableList?.add(0, lastComment)
+            comments.value = toMutableList
         }
     }
 

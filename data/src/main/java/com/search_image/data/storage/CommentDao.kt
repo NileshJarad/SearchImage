@@ -12,5 +12,5 @@ interface CommentDao {
     fun insert(comment: Comment?)
 
     @Query("Select * from comment_table WHERE imageId = :imageId ORDER BY timeStamp DESC LIMIT :limit OFFSET :offset")
-    fun getAllComments(imageId: String,limit :Int, offset: Int): List<CommentResponse>
+    fun getComments(imageId: String,limit :Int, offset: Int): List<CommentResponse>
 }

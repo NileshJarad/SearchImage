@@ -6,7 +6,7 @@ import javax.inject.Inject
  * post comment use case declaration
  */
 interface PostCommentUseCase {
-    suspend operator fun invoke(postComment: PostCommentRequest)
+    suspend operator fun invoke(postComment: PostCommentRequest) : CommentResponse
 }
 
 
@@ -18,7 +18,7 @@ interface PostCommentUseCase {
 class PostCommentUseCaseImpl @Inject constructor(
     private val imageDetailsRepository: ImageDetailsRepository
 ) : PostCommentUseCase {
-    override suspend fun invoke(postComment: PostCommentRequest) {
+    override suspend fun invoke(postComment: PostCommentRequest) :CommentResponse {
         return imageDetailsRepository.postComments(postComment)
     }
 }
