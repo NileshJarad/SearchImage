@@ -18,18 +18,23 @@ class ImageDetailsRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getComments(imageId: String, page: Int): List<CommentResponse> {
+    override suspend fun getComments(
+        imageId: String,
+        page: Int
+    ): Pair<List<CommentResponse>, Boolean> {
         if (page == 1) {
             allComments.clear()
         }
+
+        val resultFromDB: Collection<CommentResponse> = imageDb.commentDao()?.getAllComments(
+            imageId,
+            PAGE_SIZE,
+            (page - 1) * PAGE_SIZE
+        ) ?: emptyList()
         allComments.addAll(
-            imageDb.commentDao()?.getAllComments(
-                imageId,
-                PAGE_SIZE,
-                (page - 1) * PAGE_SIZE
-            ) ?: emptyList()
+            resultFromDB
         )
-        return allComments
+        return Pair(allComments, resultFromDB.isEmpty())
 
 
     }

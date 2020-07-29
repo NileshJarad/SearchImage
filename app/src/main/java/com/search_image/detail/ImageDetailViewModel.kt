@@ -24,18 +24,16 @@ class ImageDetailViewModel @Inject constructor(
 
     var comments = MutableLiveData<List<CommentResponse>>()
 
-    private var isLoadMore = true
+    private var isLastPage = false
     private var page = 1
 
     fun getCommentsFromDb() {
-        if (isLoadMore) {
+        if (isLastPage.not()) {
             viewModelScope.launch {
-                val commentListFromDb = withContext(Dispatchers.IO) { getCommentUseCase(imageId,page) }
+                val (commentListFromDb,lastPage) = withContext(Dispatchers.IO) { getCommentUseCase(imageId,page) }
                 comments.value = commentListFromDb
-                if (commentListFromDb.isEmpty()) {
-                    isLoadMore = false
-                } else {
-                    isLoadMore = true
+                isLastPage = lastPage
+                if (lastPage.not()) {
                     page++
                 }
             }
