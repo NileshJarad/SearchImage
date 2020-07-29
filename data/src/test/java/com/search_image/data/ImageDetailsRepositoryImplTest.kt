@@ -19,7 +19,7 @@ class ImageDetailsRepositoryImplTest {
     private val mockedImageDb = mock<ImageDb>()
 
     @Test
-    fun `should return network error when internet connection is not available`() =
+    fun `should invoke insert comment from db`() =
         coroutineRule.runBlockingTest {
             //GIVEN
             val repository = ImageDetailsRepositoryImpl(mockedImageDb)
@@ -34,5 +34,18 @@ class ImageDetailsRepositoryImplTest {
 
             //THEN
             verify(mockedImageDb).commentDao()?.insert(any())
+        }
+
+    @Test
+    fun `should invoke get comment from db`() =
+        coroutineRule.runBlockingTest {
+            //GIVEN
+            val repository = ImageDetailsRepositoryImpl(mockedImageDb)
+
+            //WHEN
+            repository.getComments("imageId",3)
+
+            //THEN
+            verify(mockedImageDb).commentDao()?.getAllComments("imageId",ImageDetailsRepositoryImpl.PAGE_SIZE,2*ImageDetailsRepositoryImpl.PAGE_SIZE)
         }
 }

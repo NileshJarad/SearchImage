@@ -10,8 +10,28 @@ import javax.inject.Inject
 class ImageDetailsRepositoryImpl @Inject constructor(
     private val imageDb: ImageDb
 ) : ImageDetailsRepository {
-    override suspend fun getComments(): List<CommentResponse> {
-        TODO()
+
+    private var allComments = mutableListOf<CommentResponse>()
+
+    companion object {
+        const val PAGE_SIZE = 10
+    }
+
+
+    override suspend fun getComments(imageId: String, page: Int): List<CommentResponse> {
+        if (page == 1) {
+            allComments.clear()
+        }
+        allComments.addAll(
+            imageDb.commentDao()?.getAllComments(
+                imageId,
+                PAGE_SIZE,
+                (page - 1) * PAGE_SIZE
+            ) ?: emptyList()
+        )
+        return allComments
+
+
     }
 
     override suspend fun postComments(postCommentRequestDraft: PostCommentRequest) {
