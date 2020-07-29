@@ -2,6 +2,7 @@ package com.search_image.detail;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +11,12 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.search_image.ImageDetailBinding;
 import com.search_image.MainActivity;
@@ -47,7 +51,7 @@ public class ImageDetailFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        imageDetailViewModel = new ViewModelProvider(requireActivity(), factory).get(ImageDetailViewModel.class);
+        imageDetailViewModel = new ViewModelProvider(this, factory).get(ImageDetailViewModel.class);
         imageDetailBinding.setViewModel(imageDetailViewModel);
 
         navController = NavHostFragment.findNavController(this);
@@ -57,10 +61,48 @@ public class ImageDetailFragment extends BaseFragment {
             String imageUrl = getArguments().getString("imageUrl");
             String imageId = getArguments().getString("imageId");
             title = getArguments().getString("title");
-
             imageDetailViewModel.setImageData(imageId, imageUrl);
-        }
 
+        }
+        setupActionbar(title);
+        setPostCommentButtonListener();
+        setupCommentList();
+        hideKeyboard(imageDetailBinding.commentEditText);
+    }
+
+    private void setupCommentList() {
+        CommentsAdapter commentsAdapter = new CommentsAdapter();
+        imageDetailBinding.commentsRecyclerView.setAdapter(commentsAdapter);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
+        imageDetailBinding.commentsRecyclerView.setLayoutManager(linearLayoutManager);
+
+
+        imageDetailBinding.commentsRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) { // only when scrolling up
+                    int visibleThreshold = 8;
+                    LinearLayoutManager layoutManager = linearLayoutManager;
+                    int lastItem = layoutManager.findLastCompletelyVisibleItemPosition();
+                    int currentTotalCount = layoutManager.getItemCount();
+                    Log.e("Image detail","currentTotalCount : "+currentTotalCount);
+                    Log.e("Image detail","lastItem : "+lastItem);
+                    Log.e("Image detail","visibleThreshold : "+visibleThreshold);
+                    if (currentTotalCount <= lastItem + visibleThreshold) {
+                        // load more called
+                        imageDetailViewModel.getCommentsFromDb();
+                    }
+                }
+            }
+        });
+
+        imageDetailViewModel.getComments().observe(getViewLifecycleOwner(), commentsAdapter::setComments);
+
+
+    }
+
+    private void setupActionbar(String title) {
         ((MainActivity) requireActivity()).setSupportActionBar(imageDetailBinding.toolbarDetail);
         ((MainActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ((MainActivity) requireActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -73,7 +115,9 @@ public class ImageDetailFragment extends BaseFragment {
         });
 
         imageDetailBinding.toolbarDetail.setTitle(title);
+    }
 
+    private void setPostCommentButtonListener() {
         imageDetailBinding.postCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,8 +130,6 @@ public class ImageDetailFragment extends BaseFragment {
                 imageDetailBinding.commentEditText.setText("");
             }
         });
-
-        hideKeyboard(imageDetailBinding.commentEditText);
     }
 
     public void hideKeyboard(EditText commentEditText) {
