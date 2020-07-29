@@ -54,16 +54,17 @@
             android:minHeight="@dimen/dime_fourty_four"
             android:paddingStart="@dimen/dime_eight"
             android:paddingTop="@dimen/dime_four"
-            android:paddingEnd="@dimen/dime_eight"
+            android:paddingEnd="@dimen/dime_fourty_four"
             android:paddingBottom="@dimen/dime_four"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailImageView" />
+            app:layout_constraintTop_toBottomOf="@+id/detailImageView"
+            android:autofillHints="" />
 
         <ImageButton
             android:id="@+id/postCommentButton"
-            android:layout_width="@dimen/dime_zero"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dime_fourty_four"
+            android:layout_height="@dimen/dime_fourty_four"
             android:layout_marginEnd="@dimen/dime_four"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_send_24px"

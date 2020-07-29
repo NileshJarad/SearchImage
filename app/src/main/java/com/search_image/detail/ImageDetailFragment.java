@@ -2,7 +2,6 @@ package com.search_image.detail;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
+import androidx.appcompat.app.ActionBar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -27,14 +26,6 @@ import javax.inject.Inject;
 public class ImageDetailFragment extends BaseFragment {
 
     private NavController navController;
-
-    public static ImageDetailFragment newInstance() {
-        Bundle args = new Bundle();
-
-        ImageDetailFragment fragment = new ImageDetailFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Inject
     ViewModelProvider.Factory factory;
@@ -83,12 +74,8 @@ public class ImageDetailFragment extends BaseFragment {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) { // only when scrolling up
                     int visibleThreshold = 8;
-                    LinearLayoutManager layoutManager = linearLayoutManager;
-                    int lastItem = layoutManager.findLastCompletelyVisibleItemPosition();
-                    int currentTotalCount = layoutManager.getItemCount();
-                    Log.e("Image detail","currentTotalCount : "+currentTotalCount);
-                    Log.e("Image detail","lastItem : "+lastItem);
-                    Log.e("Image detail","visibleThreshold : "+visibleThreshold);
+                    int lastItem = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                    int currentTotalCount = linearLayoutManager.getItemCount();
                     if (currentTotalCount <= lastItem + visibleThreshold) {
                         // load more called
                         imageDetailViewModel.getCommentsFromDb();
@@ -97,38 +84,36 @@ public class ImageDetailFragment extends BaseFragment {
             }
         });
 
-        imageDetailViewModel.getComments().observe(getViewLifecycleOwner(), commentsAdapter::setComments);
+        imageDetailViewModel.getComments().observe(getViewLifecycleOwner(), commentResponses -> {
+            linearLayoutManager.scrollToPosition(0);
+            commentsAdapter.setComments(commentResponses);
+        });
 
 
     }
 
     private void setupActionbar(String title) {
         ((MainActivity) requireActivity()).setSupportActionBar(imageDetailBinding.toolbarDetail);
-        ((MainActivity) requireActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ((MainActivity) requireActivity()).getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar supportActionBar = ((MainActivity) requireActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+        }
 
-        imageDetailBinding.toolbarDetail.setNavigationOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                navController.navigateUp();
-            }
-        });
+        imageDetailBinding.toolbarDetail.setNavigationOnClickListener(v -> navController.navigateUp());
 
         imageDetailBinding.toolbarDetail.setTitle(title);
     }
 
     private void setPostCommentButtonListener() {
-        imageDetailBinding.postCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageDetailViewModel.postComment(
-                        imageDetailBinding.commentEditText.getText()
-                                .toString()
-                                .trim()
-                );
-                //clear comment box once it is posted
-                imageDetailBinding.commentEditText.setText("");
-            }
+        imageDetailBinding.postCommentButton.setOnClickListener(v -> {
+            imageDetailViewModel.postComment(
+                    imageDetailBinding.commentEditText.getText()
+                            .toString()
+                            .trim()
+            );
+            //clear comment box once it is posted
+            imageDetailBinding.commentEditText.setText("");
         });
     }
 
